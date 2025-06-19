@@ -1,0 +1,26 @@
+# Query: shop
+
+11 resultados - 6 arquivos
+
+ecommerce_project\settings.py:
+  41:     'store',  # <--- MUDEI DE 'store' PARA 'store' AQUI! ISTO É CRÍTICO PARA O ERRO DE CONFLITO
+
+ecommerce_project\urls.py:
+  11:     path('', include('store.urls')), # <-- Adicione esta linha para a URL raiz da loja
+
+store\admin.py:
+  1: # store/admin.py
+
+store\models.py:
+   1: # store/models.py
+  19:         return reverse('store:product_list_by_category',
+  43:         return reverse('store:product_detail',
+
+store\urls.py:
+  1: # store/urls.py
+  6: app_name = 'store'
+
+store\views.py:
+   1: # store/views.py
+  14:                           'store/product/list.html',
+  25:                           'store/product/detail.html',

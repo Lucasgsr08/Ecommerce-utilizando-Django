@@ -1,0 +1,22 @@
+{% extends "store/base.html" %} {# Assumindo que você tem um base.html na pasta store/templates #}
+{% load crispy_forms_tags %} {# Se você estiver usando django-crispy-forms para estilização #}
+
+{% block content %}
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card p-4 shadow-sm">
+                    <h2 class="mb-4 text-center">Registrar-se</h2>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }} {# Renderiza o formulário com crispy-forms #}
+                        <button type="submit" class="btn btn-success btn-block mt-3">Registrar</button>
+                    </form>
+                    <p class="text-center mt-3">
+                        Já tem uma conta? <a href="{% url 'accounts:login' %}">Faça Login aqui</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

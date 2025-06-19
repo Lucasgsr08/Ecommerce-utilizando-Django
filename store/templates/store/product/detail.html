@@ -1,0 +1,32 @@
+{# ecommerce/store/templates/store/product/detail.html #}
+
+{% extends "store/base.html" %}
+{% load static %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<div class="product-detail">
+    {% comment %} ... (seu código existente para imagem, nome, etc.) ... {% endcomment %}
+
+    {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" width="300">
+    {% endif %}
+    <h1>{{ product.name }}</h1>
+    <p>{{ product.description|linebreaks }}</p>
+    <h2>R$ {{ product.price|floatformat:2 }}</h2> {# Garante formatação do preço #}
+    <p>Disponível: {{ product.available|yesno:"Sim,Não" }}</p> {# Exibe "Sim" ou "Não" #}
+
+    <p>
+        {# NOVO: Formulário para adicionar ao carrinho (substitui o link anterior) #}
+        <form action="{% url 'cart:add_to_cart' product.id %}" method="post">
+            {% csrf_token %} {# ESSENCIAL: Token de segurança para formulários POST #}
+            <label for="quantity">Quantidade:</label>
+            <input type="number" name="quantity" id="quantity" value="1" min="1" style="width: 60px; padding: 5px; margin-right: 10px;">
+            <input type="submit" value="🛒 Adicionar ao Carrinho" style="padding: 8px 15px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        </form>
+    </p>
+
+    <p><a href="{% url 'store:product_list' %}" style="text-decoration: none; color: #007bff;">Voltar para a lista de produtos</a></p>
+</div>
+{% endblock %}

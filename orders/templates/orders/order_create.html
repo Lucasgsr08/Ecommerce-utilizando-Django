@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="h3 mb-4 text-gray-800">Finalizar Pedido</h1>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-secondary mb-5">
+                <div class="card-header bg-secondary border-0">
+                    <h4 class="font-weight-semi-bold m-0">Informações de Envio</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }} {# Renderiza o formulário como parágrafos. Você pode estilizar melhor com divs e classes CSS #}
+                        <button type="submit" class="btn btn-primary mt-3">Confirmar Pedido</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-secondary mb-5">
+                <div class="card-header bg-secondary border-0">
+                    <h4 class="font-weight-semi-bold m-0">Resumo do Carrinho</h4>
+                </div>
+                <div class="card-body">
+                    <h5 class="mb-3">Produtos</h5>
+                    {% for item in cart %}
+                        <div class="d-flex justify-content-between">
+                            <p>{{ item.product.name }} (x{{ item.quantity }})</p>
+                            <p>R${{ item.total_price_item|floatformat:"2" }}</p>
+                        </div>
+                    {% endfor %}
+                    <hr class="mt-0">
+                    <div class="d-flex justify-content-between mb-3 pt-1">
+                        <h6 class="font-weight-medium">Subtotal</h6>
+                        <h6 class="font-weight-medium">R${{ cart.get_total_price|floatformat:"2" }}</h6>
+                    </div>
+                </div>
+                <div class="card-footer border-secondary bg-transparent">
+                    <div class="d-flex justify-content-between mt-2">
+                        <h5 class="font-weight-bold">Total</h5>
+                        <h5 class="font-weight-bold">R${{ cart.get_total_price|floatformat:"2" }}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
