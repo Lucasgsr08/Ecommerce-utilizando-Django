@@ -30,9 +30,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'store',
-    'cart',
+    'cart', # Certifique-se de que 'cart' está aqui
     'accounts',
-    'orders', # Certifique-se que 'orders' está listado aqui
+    'orders',
     # Adicione outros aplicativos conforme necessário
 ]
 
@@ -51,15 +51,17 @@ ROOT_URLCONF = 'ecommerce_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')], # <--- LINHA CRUCIAL: Adiciona o diretório de templates do projeto
-        'APP_DIRS': True,
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'), # Mantenha esta linha se você tiver uma pasta 'templates' na raiz do projeto
+        ],
+        'APP_DIRS': True, # Esta é a chave para a sua estrutura!
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'cart.context_processors.cart', # Manter esta linha se você criou o context_processors.py em 'cart'
+                'cart.context_processors.cart',
             ],
         },
     },
@@ -69,7 +71,7 @@ WSGI_APPLICATION = 'ecommerce_project.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+# https://docs.djangoproject.com/en/5.0/ref/databases
 
 DATABASES = {
     'default': {
@@ -101,9 +103,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'pt-br' # Altere para o idioma desejado
+LANGUAGE_CODE = 'pt-br'
 
-TIME_ZONE = 'America/Sao_Paulo' # Altere para seu fuso horário
+TIME_ZONE = 'America/Sao_Paulo'
 
 USE_I18N = True
 
@@ -115,9 +117,12 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'), # Se você tiver uma pasta 'static' na raiz do projeto
+    os.path.join(BASE_DIR, 'static'),
 ]
 
+# Configurações de MÍDIA (Imagens carregadas pelos usuários/admin)
+MEDIA_URL = '/media/' # URL base para servir os arquivos de mídia (ex: http://127.0.0.1:8000/media/products/...)
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/') # Caminho absoluto do sistema de arquivos para o diretório que conterá os arquivos de mídia
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

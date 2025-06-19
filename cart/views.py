@@ -1,49 +1,39 @@
 # cart/views.py
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.decorators.http import require_POST
 from store.models import Product
-from .cart import Cart # Importa a sua classe Cart do arquivo cart.py
+from .cart import Cart
+from django import forms
 
-# Função auxiliar para obter a instância do carrinho da sessão
-def get_cart(request):
-    """
-    Retorna uma instância da classe Cart que gerencia o carrinho na sessão.
-    """
-    return Cart(request)
+class CartAddProductForm(forms.Form):
+    quantity = forms.IntegerField(min_value=1, initial=1)
+    override_quantity = forms.BooleanField(required=False, widget=forms.HiddenInput)
 
 def cart_detail(request):
-    """
-    Exibe os detalhes do carrinho.
-    """
-    cart = get_cart(request) # Obtém a instância do carrinho
-    return render(request, 'cart/detail.html', {'cart': cart})
+    cart = Cart(request)
+    # AQUI É A MUDANÇA: Chame apenas 'cart_detail.html'.
+    # O Django, com APP_DIRS=True, já sabe que este template pertence ao app 'cart'
+    # e buscará dentro de 'cart/templates/cart_detail.html'
+    # (ou em 'cart/templates/cart/cart_detail.html' dependendo de como o loader funciona internamente)
+    # Teste primeiro com 'cart_detail.html'
+    return render(request, 'cart_detail.html', {'cart': cart}) # <--- MUDANÇA AQUI!
 
-@require_POST
 def add_to_cart(request, product_id):
-    """
-    Adiciona um produto ao carrinho ou atualiza sua quantidade.
-    """
-    cart = get_cart(request) # Obtém a instância do carrinho
+    cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
 
-    try:
-        quantity = int(request.POST.get('quantity', 1))
-    except ValueError:
-        quantity = 1
+    if request.method == 'POST':
+        form = CartAddProductForm(request.POST)
+        if form.is_valid():
+            quantity = form.cleaned_data['quantity']
+            override_quantity = form.cleaned_data['override_quantity']
+            cart.add(product=product, quantity=quantity, override_quantity=override_quantity)
+            return redirect('cart:cart_detail')
+    else:
+        return redirect('store:product_list')
 
-    cart.add(product=product, quantity=quantity, override_quantity=False)
-
-    return redirect('cart:cart_detail')
-
-@require_POST
-def remove_from_cart(request, item_id):
-    """
-    Remove um item do carrinho.
-    """
-    cart = get_cart(request)
-    product = get_object_or_404(Product, id=item_id)
-
+def remove_from_cart(request, product_id):
+    cart = Cart(request)
+    product = get_object_or_404(Product, id=product_id)
     cart.remove(product)
-
     return redirect('cart:cart_detail')
