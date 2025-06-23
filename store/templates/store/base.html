@@ -89,7 +89,10 @@
                         </div>
                         <div class="navbar-nav ml-auto py-0">
                             {% if request.user.is_authenticated %}
-                                <a href="{% url 'accounts:logout' %}" class="nav-item nav-link">Sair</a>
+    <form id="logout-form" method="post" action="{% url 'accounts:logout' %}" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" class="nav-item nav-link btn btn-link" style="padding: 0; border: none; background: none; color: inherit;">Sair</button>
+    </form>
                             {% else %}
                                 <a href="{% url 'accounts:login' %}" class="nav-item nav-link">Entrar</a>
                                 <a href="{% url 'accounts:register' %}" class="nav-item nav-link">Registrar</a>

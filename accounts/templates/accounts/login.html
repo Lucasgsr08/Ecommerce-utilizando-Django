@@ -1,0 +1,14 @@
+{% extends "store/base.html" %}
+{% load static %}
+
+{% block title %}Entrar{% endblock %}
+
+{% block content %}
+  <h2>Entrar</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Entrar</button>
+  </form>
+  <p>Não tem uma conta? <a href="{% url 'accounts:register' %}">Cadastre-se</a></p>
+{% endblock %}
