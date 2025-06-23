@@ -1,26 +1,15 @@
 # ecommerce_project/settings.py
 
-# Certifique-se de que 'import os' está no topo do seu arquivo
 import os
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SECRET_KEY = 'django-insecure-@1r)u46*n7z0!^d=^-a8z(16q)y-h$t^2v$#o*@#+@3_#q%8#p'
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-@1r)u46*n7z0!^d=^-a8z(16q)y-h$t^2v$#o*@#+@3_#q%8#p' # Altere isso para a sua chave secreta real
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -30,10 +19,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'store',
-    'cart', # Certifique-se de que 'cart' está aqui
+    'cart',
     'accounts',
     'orders',
-    # Adicione outros aplicativos conforme necessário
+    'crispy_forms',
+    'crispy_bootstrap4',  # Adiciona o template pack do Bootstrap 4
 ]
 
 MIDDLEWARE = [
@@ -52,9 +42,9 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates'), # Mantenha esta linha se você tiver uma pasta 'templates' na raiz do projeto
+            os.path.join(BASE_DIR, 'templates'),
         ],
-        'APP_DIRS': True, # Esta é a chave para a sua estrutura!
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -63,15 +53,12 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'cart.context_processors.cart',
             ],
+            'debug': True,
         },
     },
 ]
 
 WSGI_APPLICATION = 'ecommerce_project.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/databases
 
 DATABASES = {
     'default': {
@@ -79,10 +66,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-
-# Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -99,10 +82,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
-
 LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'America/Sao_Paulo'
@@ -111,23 +90,18 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
-
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-# Configurações de MÍDIA (Imagens carregadas pelos usuários/admin)
-MEDIA_URL = '/media/' # URL base para servir os arquivos de mídia (ex: http://127.0.0.1:8000/media/products/...)
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/') # Caminho absoluto do sistema de arquivos para o diretório que conterá os arquivos de mídia
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Configuração específica do carrinho
 CART_SESSION_ID = 'cart'
+
+# Configurações do django-crispy-forms
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_ALLOWED_TEMPLATE_PACKS = ['bootstrap4']
