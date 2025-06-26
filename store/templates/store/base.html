@@ -1,187 +1,348 @@
 <!DOCTYPE html>
-{% load static %}
 <html lang="pt-br">
 <head>
-    <meta charset="utf-8">
-    <title>{% block title %}Ecommerce{% endblock %}</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="" name="keywords"> {# Palavras-chave #}
-    <meta content="" name="description"> {# Descrição #}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CryAmazon - Loja Online{% endblock %}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <link href="{% static 'img/favicon.ico' %}" rel="icon">
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
 
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet"> 
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
 
-    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo::before {
+            content: "🛒";
+            margin-right: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background: #f8f9fa;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .breadcrumb a {
+            color: #007bff;
+            text-decoration: none;
+            margin-right: 0.5rem;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: flex;
+            min-height: calc(100vh - 200px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: #f8f9fa;
+            padding: 2rem 1rem;
+            border-right: 1px solid #e9ecef;
+        }
+
+        .sidebar h3 {
+            color: #2a5298;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            border-bottom: 2px solid #2a5298;
+            padding-bottom: 0.5rem;
+        }
+
+        .category-list {
+            list-style: none;
+        }
+
+        .category-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        .category-list a {
+            color: #555;
+            text-decoration: none;
+            padding: 0.5rem;
+            display: block;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .category-list a:hover {
+            background: #e9ecef;
+            color: #2a5298;
+            transform: translateX(5px);
+        }
+
+        /* Content Area */
+        .content {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2a5298;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .footer-section p, .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            line-height: 1.6;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-layout {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                order: 2;
+            }
+            
+            .content {
+                order: 1;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        /* Utility Classes */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
 </head>
-
 <body>
-    {# Topbar Início #}
-    <div class="container-fluid bg-dark">
-        <div class="row py-2 px-lg-5">
-            <div class="col-lg-6 d-none d-lg-block">
-                <div class="d-inline-flex align-items-center">
-                    <a class="text-light px-2" href="">Perguntas Frequentes</a>
-                    <span class="text-light">|</span>
-                    <a class="text-light px-2" href="">Ajuda</a>
-                    <span class="text-light">|</span>
-                    <a class="text-light px-2" href="">Suporte</a>
-                </div>
-            </div>
-            <div class="col-lg-6 text-center text-lg-right">
-                <div class="d-inline-flex align-items-center">
-                    <a class="text-light px-2" href="">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a class="text-light px-2" href="">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a class="text-light px-2" href="">
-                        <i class="fab fa-linkedin-in"></i>
-                    </a>
-                    <a class="text-light px-2" href="">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a class="text-light pl-2" href="">
-                        <i class="fab fa-youtube"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    {# Topbar Fim #}
-
-    {# Navbar Início #}
-    <div class="container-fluid bg-light mb-30">
-        <div class="row px-xl-5">
-            <div class="col-lg-3 d-none d-lg-block">
-                {# Este botão/div parece ser de uma barra de navegação vertical de categorias que foi removida ou não está completa #}
-                <a class="btn d-flex align-items-center justify-content-between bg-primary w-100" data-toggle="collapse" href="#navbar-vertical" style="height: 65px; padding: 0 30px;">
-                    {# Conteúdo para o botão de categoria aqui, se houver #}
-                </a>
-            </div>
-            <div class="col-lg-9">
-                <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0">
-                    <a href="{% url 'store:product_list' %}" class="text-decoration-none d-block d-lg-none">
-                        <h1 class="m-0 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border px-3 mr-1">Cry</span>Amazon</h1>
-                    </a>
-                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                        <div class="navbar-nav mr-auto py-0">
-                            <a href="{% url 'store:product_list' %}" class="nav-item nav-link active">Início</a>
-                            <a href="{% url 'store:product_list' %}" class="nav-item nav-link">Loja</a>
-                            <a href="{% url 'store:product_list' %}" class="nav-item nav-link">Detalhes do Produto</a>
-                            <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Páginas <i class="fa fa-angle-down mt-1"></i></a>
-                                <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
-                                    <a href="{% url 'cart:cart_detail' %}" class="dropdown-item">Carrinho de Compras</a>
-                                    <a href="{% url 'orders:order_create' %}" class="dropdown-item">Finalizar Compra</a>
-                                </div>
-                            </div>
-                            <a href="contact.html" class="nav-item nav-link">Contato</a>
-                        </div>
-                        <div class="navbar-nav ml-auto py-0">
-                            {% if request.user.is_authenticated %}
-    <form id="logout-form" method="post" action="{% url 'accounts:logout' %}" style="display: inline;">
-        {% csrf_token %}
-        <button type="submit" class="nav-item nav-link btn btn-link" style="padding: 0; border: none; background: none; color: inherit;">Sair</button>
-    </form>
-                            {% else %}
-                                <a href="{% url 'accounts:login' %}" class="nav-item nav-link">Entrar</a>
-                                <a href="{% url 'accounts:register' %}" class="nav-item nav-link">Registrar</a>
-                            {% endif %}
-                        </div>
-                    </div>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <a href="/" class="logo">CryAmazon</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="/">Início</a></li>
+                        <li><a href="/1/">Produtos</a></li>
+                        <li><a href="/cart/">Carrinho</a></li>
+                        <li><a href="/contato/">Contato</a></li>
+                    </ul>
                 </nav>
             </div>
+        </header>
+
+        {% if breadcrumb %}
+        <div class="breadcrumb">
+            {% for item in breadcrumb %}
+                {% if not forloop.last %}
+                    <a href="{{ item.url }}">{{ item.name }}</a> >
+                {% else %}
+                    {{ item.name }}
+                {% endif %}
+            {% endfor %}
         </div>
-    </div>
-    {# Navbar Fim #}
+        {% endif %}
 
-    {# Conteúdo da Página - Bloco para ser preenchido por outros templates #}
-    {% block content %}
-    {% endblock %}
-    {# Conteúdo da Página - Fim #}
+        <div class="main-layout">
+            <aside class="sidebar">
+                <h3>Categorias</h3>
+                <ul class="category-list">
+                    <li><a href="/1/">📱 Celulares</a></li>
+                    <li><a href="/">🎮 Games</a></li>
+                    <li><a href="/">💻 Informática</a></li>
+                    <li><a href="/">🏠 Casa e Jardim</a></li>
+                    <li><a href="/">👕 Roupas</a></li>
+                    <li><a href="/">📚 Livros</a></li>
+                </ul>
 
-    {# Footer Início #}
-    <div class="container-fluid bg-dark text-secondary mt-5 pt-5">
-        <div class="row px-xl-5 pt-5">
-            <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
-                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>Rua 10, BRASIL</p>
-                <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
-                <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+55 345 67890</p>
-            </div>
-            <div class="col-lg-8 col-md-12">
-                <div class="row">
-                    <div class="col-md-4 mb-5">
-                        {# Este div estava vazio no seu código. Se for para ser preenchido, adicione conteúdo aqui. #}
-                    </div>
-                    <div class="col-md-4 mb-5">
-                        <h5 class="text-secondary text-uppercase mb-4">Minha conta</h5>
-                        <div class="d-flex flex-column justify-content-start">
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Página Inicial</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Nossa Loja</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Detalhes do Produto</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Carrinho de Compras</a> {# Assumindo que este era o "Detalhes da loja" #}
-                            <a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Contatos</a>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-5">
-                        <h5 class="text-secondary text-uppercase mb-4">Newsletter</h5> {# Adicionado título para o formulário #}
-                        <p>Assine nossa newsletter para receber as últimas novidades e ofertas!</p> {# Adicionado um texto de contexto #}
-                        <form action="">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Seu e-mail">
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary">Assinar</button>
-                                </div>
-                            </div>
-                        </form>
-                        <h6 class="text-secondary text-uppercase mt-4 mb-3">Siga-nos</h6>
-                        <div class="d-flex">
-                            <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-twitter"></i></a>
-                            <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
-                            <a class="btn btn-primary btn-square" href="#"><i class="fab fa-instagram"></i></a>
-                        </div>
-                    </div>
+                <h3 style="margin-top: 2rem;">Suporte</h3>
+                <ul class="category-list">
+                    <li><a href="/contato/">📞 Contato</a></li>
+                    <li><a href="/suporte/">❓ Ajuda</a></li>
+                    <li><a href="/sobre/">ℹ️ Sobre</a></li>
+                </ul>
+            </aside>
+
+            <main class="content">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>CryAmazon</h4>
+                    <p>Sua loja online de confiança com os melhores produtos e preços.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Contato</h4>
+                    <p>📍 Goiânia, GO, BRASIL</p>
+                    <p>📧 info@cryamazon.com</p>
+                    <p>📞 +55 345 67890</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Formas de Pagamento</h4>
+                    <p>💳 Cartão de Crédito</p>
+                    <p>💰 PIX</p>
+                    <p>🏦 Boleto Bancário</p>
                 </div>
             </div>
-        </div>
-        <div class="row border-top border-light mx-xl-5 py-4">
-            <div class="col-md-6 px-xl-0">
-                <p class="mb-md-0 text-center text-md-left text-secondary">
-                    {# Conteúdo de copyright ou créditos aqui, se houver #}
-                </p>
+
+            <div class="social-links">
+                <a href="#" title="Facebook">📘</a>
+                <a href="#" title="Instagram">📷</a>
+                <a href="#" title="Twitter">🐦</a>
+                <a href="#" title="LinkedIn">💼</a>
             </div>
-            <div class="col-md-6 px-xl-0 text-center text-md-right">
-                <img class="img-fluid" src="{% static 'img/payments.png' %}" alt="Formas de Pagamento">
-            </div>
-        </div>
+
+            <p style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                © 2025 CryAmazon. Todos os direitos reservados.
+            </p>
+        </footer>
     </div>
-    {# Footer Fim #}
 
-    {# Botão Voltar ao Topo #}
-    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
-
-    {# Bibliotecas JavaScript #}
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
-    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
-
-    {# Script de Validação e Contato (se necessário) #}
-    <script src="{% static 'mail/jqBootstrapValidation.min.js' %}"></script>
-    <script src="{% static 'mail/contact.js' %}"></script>
-
-    {# Script Principal do Tema #}
-    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>
