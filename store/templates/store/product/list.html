@@ -1,41 +1,44 @@
-{# store/templates/store/product/list.html #}
-{% extends "store/base.html" %} {# Estende o template base #}
-{% load static %} {# Carrega os arquivos estáticos, se não estiverem no base.html #}
+{% extends "store/base.html" %}
+{% load static %}
 
-{% block title %}Produtos{% endblock %} {# Define o título da página #}
+{% block title %}CryAmazon | Produtos{% endblock %}
 
-{% block content %} {# Início do bloco de conteúdo #}
-    <div class="categories">
-        <h2>Categorias</h2>
-        <ul>
-            <li {% if not category %}class="selected"{% endif %}>
-                <a href="{% url 'store:product_list' %}">Todos</a>
-            </li>
-            {% for c in categories %}
-                <li {% if category.slug == c.slug %}class="selected"{% endif %}>
-                    <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
-                </li>
-            {% endfor %}
-        </ul>
+{% block content %}
+<div>
+  <h2 style="margin-bottom: 1rem;">Categorias</h2>
+  <ul class="category-list" style="margin-bottom: 2rem;">
+    <li>
+      <a href="{% url 'store:product_list' %}" {% if not category %}class="selected"{% endif %}>
+        Todos
+      </a>
+    </li>
+    {% for c in categories %}
+    <li>
+      <a href="{{ c.get_absolute_url }}" {% if category.slug == c.slug %}class="selected"{% endif %}>
+        {{ c.name }}
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+
+  <h1>{% if category %}{{ category.name }}{% endif %} Todos os Produtos</h1>
+
+  <div class="product-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 2rem; margin-top: 2rem;">
+    {% for product in products %}
+    <div style="border: 1px solid #e0e0e0; padding: 1rem; border-radius: 10px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); background: #fff;">
+      <a href="{{ product.get_absolute_url }}">
+        {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 100%; height: 180px; object-fit: contain;">
+        {% else %}
+        <div style="height: 180px; background: #f0f0f0;">Sem imagem</div>
+        {% endif %}
+        <h4 style="margin-top: 1rem;">{{ product.name }}</h4>
+      </a>
+      <p style="color: #2a5298; font-weight: bold;">R$ {{ product.price }}</p>
     </div>
-
-    <h1>{% if category %}{{ category.name }}{% else %}Todos os Produtos{% endif %}</h1>
-
-    <div class="product-list">
-        {% for product in products %}
-            <div class="item">
-                <a href="{{ product.get_absolute_url }}">
-                    {% if product.image %}
-                        <img src="{{ product.image.url }}" alt="{{ product.name }}" width="150">
-                    {% else %}
-                        <p>Sem imagem</p>
-                    {% endif %}
-                </a>
-                <a href="{{ product.get_absolute_url }}">{{ product.name }}</a><br>
-                <span>${{ product.price }}</span>
-            </div>
-        {% empty %}
-            <p>Nenhum produto disponível.</p>
-        {% endfor %}
-    </div>
-{% endblock %} {# Fim do bloco de conteúdo #}
+    {% empty %}
+    <p>Nenhum produto disponível.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
