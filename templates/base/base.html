@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    {% include "base/partials/head.html" %}
+</head>
+<body>
+    <div class="container">
+        {% include "base/partials/header.html" %}
+
+        {% if breadcrumb %}
+            {% include "base/partials/breadcrumb.html" %}
+        {% endif %}
+
+        <div class="main-layout">
+            {% include "base/partials/sidebar.html" %}
+
+            <main class="content">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+
+        {% include "base/partials/footer.html" %}
+    </div>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
