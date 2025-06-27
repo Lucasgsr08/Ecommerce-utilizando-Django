@@ -25,6 +25,7 @@
         <td>
           <form action="{% url 'cart:add_to_cart' item.product.id %}" method="post" style="display: inline;">
             {% csrf_token %}
+            <input type="hidden" name="override_quantity" value="True">
             <input type="number" name="quantity" value="{{ item.quantity }}" min="1" style="width: 50px;">
             <button type="submit" class="btn btn-primary btn-sm">Atualizar</button>
           </form>

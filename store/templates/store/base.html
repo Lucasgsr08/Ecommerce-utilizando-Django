@@ -265,7 +265,8 @@
                 <nav>
                     <ul class="nav-links">
                         <li><a href="/">Início</a></li>
-                        <li><a href="/1/">Produtos</a></li>
+                        <li><a href="{% url 'store:product_list' %}">Produtos</a></li>
+
                         <li><a href="/cart/">Carrinho</a></li>
                         <li><a href="/contato/">Contato</a></li>
                     </ul>
@@ -289,7 +290,7 @@
             <aside class="sidebar">
                 <h3>Categorias</h3>
                 <ul class="category-list">
-                    <li><a href="/1/">📱 Celulares</a></li>
+                    <li><a href="/">📱 Celulares</a></li>
                     <li><a href="/">🎮 Games</a></li>
                     <li><a href="/">💻 Informática</a></li>
                     <li><a href="/">🏠 Casa e Jardim</a></li>

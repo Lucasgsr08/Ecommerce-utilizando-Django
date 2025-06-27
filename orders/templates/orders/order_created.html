@@ -1,0 +1,14 @@
+{% extends "store/base.html" %}
+
+{% block title %}Pedido Finalizado{% endblock %}
+
+{% block content %}
+<div class="order-success" style="text-align: center; padding: 4rem;">
+    <h2 style="color: #4CAF50;">🎉 Pedido Realizado com Sucesso!</h2>
+    <p>Obrigado por comprar conosco. Seu pedido foi registrado e está sendo processado.</p>
+    <div style="margin-top: 2rem;">
+        <a href="{% url 'store:product_list' %}" class="btn btn-primary">Voltar para Loja</a>
+
+    </div>
+</div>
+{% endblock %}
