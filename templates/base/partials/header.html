@@ -1,6 +1,12 @@
 <header class="header">
     <div class="header-content">
         <a href="/" class="logo">LojaVirtual</a>
+<form method="GET" action="{% url 'store:product_list' %}" class="search-form">
+    <input type="text" name="q" placeholder="Buscar produto..." class="search-input">
+    <button type="submit" class="search-button">Buscar</button>
+</form>
+        
+        
         <nav>
             <ul class="nav-links">
                 <li><a href="/">Início</a></li>

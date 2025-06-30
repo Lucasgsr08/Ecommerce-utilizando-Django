@@ -4,6 +4,7 @@
 {% block title %}LojaVirtual | Produtos{% endblock %}
 
 {% block content %}
+
 <div>
   <h2 style="margin-bottom: 1rem;">Categorias</h2>
   <ul class="category-list" style="margin-bottom: 2rem;">
@@ -20,11 +21,7 @@
     </li>
     {% endfor %}
   </ul>
-  <form method="get" action="{% url 'store:product_list' %}" style="margin-bottom: 1.5rem;">
-    <input type="text" name="q" placeholder="Buscar produto..." value="{{ request.GET.q }}" style="padding: 0.5rem; width: 60%;">
-    <button type="submit" style="padding: 0.5rem; background: #6c5ce7; color: white; border: none; border-radius: 5px;">Buscar</button>
-</form>
-
+  
 
   <h1>{% if category %}{{ category.name }}{% endif %} Todos os Produtos</h1>
 
