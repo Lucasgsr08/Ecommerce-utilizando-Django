@@ -4,6 +4,21 @@
 {% block title %}LojaVirtual | Produtos{% endblock %}
 
 {% block content %}
+<form method="get" style="margin-bottom: 2rem; display: flex; gap: 1rem; align-items: center;">
+  <input type="number" name="min_price" placeholder="Preço mínimo" value="{{ request.GET.min_price }}" style="padding: 0.5rem; border: 1px solid #ccc; border-radius: 5px;">
+  <input type="number" name="max_price" placeholder="Preço máximo" value="{{ request.GET.max_price }}" style="padding: 0.5rem; border: 1px solid #ccc; border-radius: 5px;">
+  
+  {% if category %}
+    <input type="hidden" name="category" value="{{ category.slug }}">
+  {% endif %}
+  
+  {% if request.GET.q %}
+    <input type="hidden" name="q" value="{{ request.GET.q }}">
+  {% endif %}
+
+  <button type="submit" style="padding: 0.5rem 1rem; background-color: #2a5298; color: white; border: none; border-radius: 5px;">Filtrar</button>
+</form>
+
 
 <div>
   <h2 style="margin-bottom: 1rem;">Categorias</h2>
@@ -21,6 +36,7 @@
     </li>
     {% endfor %}
   </ul>
+  
   
 
   <h1>{% if category %}{{ category.name }}{% endif %} Todos os Produtos</h1>
@@ -43,4 +59,5 @@
     {% endfor %}
   </div>
 </div>
+
 {% endblock %}
