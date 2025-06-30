@@ -1,4 +1,4 @@
-# 🛒 CryAmazon - Ecommerce com Django
+# 🛒 LojaVirtual - Ecommerce com Django
 
 Este é um projeto de ecommerce desenvolvido em Django para fins de aprendizado e portfólio. Ele inclui funcionalidades básicas como cadastro, login, logout, navegação por categorias, carrinho de compras e finalização de pedidos.
 
