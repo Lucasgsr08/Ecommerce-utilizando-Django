@@ -1,15 +1,26 @@
-{% load static %}
 {% extends "store/base.html" %}
+{% load static %}
 
-
+{# Define o título da aba #}
 {% block title %}Entrar{% endblock %}
 
+{# Conteúdo da página de login #}
 {% block content %}
-  <h2>Entrar</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Entrar</button>
-  </form>
-  <p>Não tem uma conta? <a href="{% url 'accounts:register' %}">Cadastre-se</a></p>
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card p-4 shadow-sm">
+          <h2 class="mb-4 text-center">Entrar</h2>
+          <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}  {# Renderiza os campos do formulário de login #}
+            <button type="submit" class="btn btn-primary w-100 mt-3">Entrar</button>
+          </form>
+          <p class="text-center mt-3">
+            Não tem uma conta? <a href="{% url 'accounts:register' %}">Cadastre-se</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

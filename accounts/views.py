@@ -1,15 +1,29 @@
+# accounts/views.py
+from django.contrib.auth import login as auth_login
+from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render, redirect
-from django.contrib import messages
-from .forms import UserRegisterForm
+from .forms import SignUpForm   # ← agora importa o nome correto
+
+
+class CustomLoginView(LoginView):
+    template_name = 'registration/login.html'
+
+
+class CustomLogoutView(LogoutView):
+    next_page = '/'   # ou use o LOGOUT_REDIRECT_URL do settings
+
 
 def register(request):
+    """
+    Tela de cadastro + login automático após sucesso.
+    """
     if request.method == 'POST':
-        form = UserRegisterForm(request.POST)
+        form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request, f'Conta criada com sucesso para {username}! Você já pode fazer login.')
-            return redirect('accounts:login')  # Certifique-se que você tem esta URL definida
+            user = form.save()
+            auth_login(request, user)
+            return redirect('store:product_list')   # ajuste se quiser
     else:
-        form = UserRegisterForm()
-    return render(request, 'accounts/register.html', {'form': form})
+        form = SignUpForm()
+
+    return render(request, 'registration/register.html', {'form': form})
