@@ -1,5 +1,6 @@
 # accounts/views.py
 from django.contrib.auth import login as auth_login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render, redirect
 from .forms import SignUpForm   # ← agora importa o nome correto
@@ -12,6 +13,10 @@ class CustomLoginView(LoginView):
 class CustomLogoutView(LogoutView):
     next_page = '/'   # ou use o LOGOUT_REDIRECT_URL do settings
 
+
+@login_required # Decorador para garantir que o usuário esteja logado
+def profile(request):
+    return render(request, 'accounts/profile.html')
 
 def register(request):
     """
