@@ -2,6 +2,7 @@
 
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User  # 🔹 Importado para o modelo de comentários
 
 class Category(models.Model):
     name = models.CharField(max_length=200, db_index=True)
@@ -18,11 +19,11 @@ class Category(models.Model):
     def get_absolute_url(self):
         return reverse('store:product_list_by_category', args=[self.slug])
 
+
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
     name = models.CharField(max_length=200, db_index=True)
     slug = models.SlugField(max_length=200, db_index=True)
-    # Certifique-se de que você tem Pillow instalado para ImageField funcionar: pip install Pillow
     image = models.ImageField(upload_to='products/%Y/%m/%d', blank=True)
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -32,8 +33,6 @@ class Product(models.Model):
 
     class Meta:
         ordering = ('name',)
-        # Adicionado de volta os índices para otimização de consulta.
-        # Eles não causam problemas no Django 5+.
         indexes = [
             models.Index(fields=['id', 'slug']),
             models.Index(fields=['name']),
@@ -44,5 +43,19 @@ class Product(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        # Usando 'id' e 'slug' na URL para boa prática e SEO.
         return reverse('store:product_detail', args=[self.id, self.slug])
+
+
+# Comentário com estrelas de 1 a 5
+class Comment(models.Model):
+    product = models.ForeignKey(Product, related_name='comments', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = models.TextField("Comentário")
+    rating = models.IntegerField("Avaliação (1 a 5)", choices=[(i, i) for i in range(1, 6)], default=5)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'{self.user.username} - {self.product.name} - {self.rating} estrela(s)'
