@@ -11,29 +11,30 @@
 
   <div>
     <h1>{{ product.name }}</h1>
-
-    {# INÍCIO DA ADIÇÃO: Bloco de Avaliação Média #}
-    {% if average_rating %}
-      <div class="mb-2">
-        {% for i in "12345"|make_list %}
-          {% if forloop.counter <= average_rating|floatformat:0 %}
-            ⭐ {# Estrela preenchida #}
-          {% else %}
-            ☆ {# Estrela vazia #}
-          {% endif %}
-        {% endfor %}
-        <small class="text-muted">
-            ({{ average_rating|floatformat:1 }} de 5 — {{ total_reviews }} avaliação{{ total_reviews|pluralize }})
-        </small>
-      </div>
-    {% else %}
-      <p class="text-muted">Este produto ainda não foi avaliado.</p>
-    {% endif %}
-    {# FIM DA ADIÇÃO: Bloco de Avaliação Média #}
-
     <h2 style="color: #2a5298;">R$ {{ product.price|floatformat:2 }}</h2>
     <p>{{ product.description|linebreaks }}</p>
     <p><strong>Disponível:</strong> {{ product.available|yesno:"Sim,Não" }}</p>
+
+    {# ---------- EXIBIR ESTRELAS DE AVALIAÇÃO ---------- #}
+    {% if average_rating %}
+      {% with avg=average_rating|floatformat:1 %}
+        <p style="font-size: 1.2rem; color: #ffc107;">
+          {% for i in "12345" %}
+            {% if forloop.counter <= average_rating %}
+              ★
+            {% else %}
+              ☆
+            {% endif %}
+          {% endfor %}
+          <span style="color: #000;">
+            ({{ avg }} de 5 — {{ total_reviews }} avaliação{{ total_reviews|pluralize:",ões" }})
+          </span>
+        </p>
+      {% endwith %}
+    {% else %}
+      <p>Ainda não há avaliações para este produto.</p>
+    {% endif %}
+    {# ---------- /ESTRELAS DE AVALIAÇÃO ---------- #}
 
     <form action="{% url 'cart:add_to_cart' product.id %}" method="post" style="margin-top: 1rem;">
       {% csrf_token %}
@@ -58,43 +59,40 @@
     {% for comment in comments %}
       <div class="card mb-3">
         <div class="card-body">
-          <p><strong>{{ comment.user.username }}</strong> -
-
-            {% for i in "12345"|make_list %}
-            {% if forloop.counter <= comment.rating %}
-            ⭐
-            {% else %}
-            ☆
-            {% endif %}
+          <p class="mb-1">
+            <strong>{{ comment.user.username }}</strong> em {{ comment.created_at|date:"d/m/Y H:i" }}
+          </p>
+          <p class="mb-1 text-warning" style="font-size: 1.1rem;">
+            {% for i in "12345" %}
+              {% if forloop.counter <= comment.rating %}
+                ★
+              {% else %}
+                ☆
+              {% endif %}
             {% endfor %}
           </p>
-          <p>{{ comment.text|linebreaks }}</p>
-          <small class="text-muted">{{ comment.created_at|date:"d/m/Y H:i" }}</small>
+          <p class="mb-0">{{ comment.text|linebreaks }}</p>
         </div>
       </div>
     {% endfor %}
   {% else %}
     <p>Este produto ainda não possui comentários.</p>
   {% endif %}
-
-  <hr>
-  {# Removido o bloco duplicado de "Adicionar Comentário" daqui, pois já há um mais abaixo #}
 </div>
 
-<hr>
-
 {# ---------------------- FORMULÁRIO DE COMENTÁRIO ---------------------- #}
-<div class="container mt-4">
-  <h4>Deixe seu comentário</h4>
-
-  {% if user.is_authenticated %}
+{% if user.is_authenticated %}
+  <div class="container mt-5">
+    <h4>Deixe seu comentário</h4>
     <form method="post">
       {% csrf_token %}
       {{ form.as_p }}
-      <button type="submit" class="btn btn-success">Enviar Comentário</button>
+      <button type="submit" class="btn btn-success">Enviar comentário</button>
     </form>
-  {% else %}
-    <p>Você precisa <a href="{% url 'accounts:login' %}?next={{ request.path }}">estar logado</a> para comentar.</p>
-  {% endif %}
-</div>
+  </div>
+{% else %}
+  <p class="text-center mt-4">
+    <a href="{% url 'accounts:login' %}">Faça login</a> para deixar um comentário.
+  </p>
+{% endif %}
 {% endblock %}
