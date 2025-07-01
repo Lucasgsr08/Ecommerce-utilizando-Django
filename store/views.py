@@ -2,8 +2,10 @@
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.db.models import Avg, Count  # Importado para calcular média e contagem
 from .models import Product, Category, Comment
 from .forms import CommentForm
+
 
 def product_list(request, category_slug=None):
     category = None
@@ -37,7 +39,13 @@ def product_list(request, category_slug=None):
 
 def product_detail(request, id, slug):
     product = get_object_or_404(Product, id=id, slug=slug, available=True)
-    comments = product.comments.all()
+    comments = product.comments.select_related('user').order_by('-created_at')
+
+    # Cálculo da média e contagem de avaliações
+    rating_data = product.comments.aggregate(
+        average_rating=Avg('rating'),
+        total_reviews=Count('id')
+    )
 
     if request.method == 'POST':
         if request.user.is_authenticated:
@@ -47,16 +55,18 @@ def product_detail(request, id, slug):
                 new_comment.product = product
                 new_comment.user = request.user
                 new_comment.save()
-                form = CommentForm()  # limpa o formulário
+                return redirect('store:product_detail', id=product.id, slug=product.slug)
         else:
-            form = CommentForm()  # usuário não autenticado
+            form = CommentForm()
     else:
         form = CommentForm()
 
     return render(request, 'store/product/detail.html', {
         'product': product,
         'comments': comments,
-        'form': form
+        'form': form,
+        'average_rating': rating_data['average_rating'],
+        'total_reviews': rating_data['total_reviews'],
     })
 
 

@@ -11,6 +11,26 @@
 
   <div>
     <h1>{{ product.name }}</h1>
+
+    {# INÍCIO DA ADIÇÃO: Bloco de Avaliação Média #}
+    {% if average_rating %}
+      <div class="mb-2">
+        {% for i in "12345"|make_list %}
+          {% if forloop.counter <= average_rating|floatformat:0 %}
+            ⭐ {# Estrela preenchida #}
+          {% else %}
+            ☆ {# Estrela vazia #}
+          {% endif %}
+        {% endfor %}
+        <small class="text-muted">
+            ({{ average_rating|floatformat:1 }} de 5 — {{ total_reviews }} avaliação{{ total_reviews|pluralize }})
+        </small>
+      </div>
+    {% else %}
+      <p class="text-muted">Este produto ainda não foi avaliado.</p>
+    {% endif %}
+    {# FIM DA ADIÇÃO: Bloco de Avaliação Média #}
+
     <h2 style="color: #2a5298;">R$ {{ product.price|floatformat:2 }}</h2>
     <p>{{ product.description|linebreaks }}</p>
     <p><strong>Disponível:</strong> {{ product.available|yesno:"Sim,Não" }}</p>
@@ -38,20 +58,15 @@
     {% for comment in comments %}
       <div class="card mb-3">
         <div class="card-body">
-          <p><strong>{{ comment.user.username }}</strong> - 
+          <p><strong>{{ comment.user.username }}</strong> -
 
             {% for i in "12345"|make_list %}
             {% if forloop.counter <= comment.rating %}
-    ⭐
+            ⭐
             {% else %}
             ☆
             {% endif %}
             {% endfor %}
-
-
-
-
-
           </p>
           <p>{{ comment.text|linebreaks }}</p>
           <small class="text-muted">{{ comment.created_at|date:"d/m/Y H:i" }}</small>
@@ -63,16 +78,7 @@
   {% endif %}
 
   <hr>
-  {% if user.is_authenticated %}
-    <h4 class="mt-4">Adicionar Comentário</h4>
-    <form method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit" class="btn btn-success">Enviar</button>
-    </form>
-  {% else %}
-    <p class="mt-4">Faça <a href="{% url 'accounts:login' %}">login</a> para comentar.</p>
-  {% endif %}
+  {# Removido o bloco duplicado de "Adicionar Comentário" daqui, pois já há um mais abaixo #}
 </div>
 
 <hr>
