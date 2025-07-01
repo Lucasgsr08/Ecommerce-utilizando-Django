@@ -39,9 +39,19 @@
       <div class="card mb-3">
         <div class="card-body">
           <p><strong>{{ comment.user.username }}</strong> - 
-            {% for star in "12345"|slice:":comment.rating"|make_list %}
-              ⭐
+
+            {% for i in "12345"|make_list %}
+            {% if forloop.counter <= comment.rating %}
+    ⭐
+            {% else %}
+            ☆
+            {% endif %}
             {% endfor %}
+
+
+
+
+
           </p>
           <p>{{ comment.text|linebreaks }}</p>
           <small class="text-muted">{{ comment.created_at|date:"d/m/Y H:i" }}</small>
