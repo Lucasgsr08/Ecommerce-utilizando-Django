@@ -122,17 +122,6 @@ Siga os passos abaixo para configurar e executar a LojaVirtual em seu ambiente d
 
 1.  **Clone o repositório:**
 
-    ```bash
-
-    git clone <URL_DO_SEU_REPOSITORIO>
-
-    cd LojaVirtual # ou o nome da sua pasta raiz do projeto (ex: ecommerce)
-
-    ```
-
-    *(Substitua `<URL_DO_SEU_REPOSITORIO>` pelo link do seu GitHub/GitLab/Bitbucket)*
-
-
 
 2.  **Crie e ative um ambiente virtual:**
 
