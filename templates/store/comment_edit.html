@@ -1,0 +1,12 @@
+{% extends "store/base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <h2>Editar Comentário</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a href="{% url 'store:product_detail' id=comment.product.id slug=comment.product.slug %}" class="btn btn-secondary">Cancelar</a>
+  </form>
+</div>
+{% endblock %}

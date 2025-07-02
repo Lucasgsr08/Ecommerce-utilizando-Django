@@ -15,15 +15,15 @@
     <p>{{ product.description|linebreaks }}</p>
     <p><strong>Disponível:</strong> {{ product.available|yesno:"Sim,Não" }}</p>
 
-    {# ---------- EXIBIR ESTRELAS DE AVALIAÇÃO ---------- #}
+    {# ---------- EXIBIR ESTRELAS DE AVALIAÇÃO MÉDIA ---------- #}
     {% if average_rating %}
       {% with avg=average_rating|floatformat:1 %}
         <p style="font-size: 1.2rem; color: #ffc107;">
           {% for i in "12345" %}
             {% if forloop.counter <= average_rating %}
-              ★
+              <span style="color: #ffc107;">&#9733;</span>
             {% else %}
-              ☆
+              <span style="color: #ccc;">&#9733;</span>
             {% endif %}
           {% endfor %}
           <span style="color: #000;">
@@ -59,10 +59,24 @@
     {% for comment in comments %}
       <div class="card mb-3">
         <div class="card-body">
-          <p class="mb-1">
-            <strong>{{ comment.user.username }}</strong> em {{ comment.created_at|date:"d/m/Y H:i" }}
-          </p>
-          <p class="mb-1 text-warning" style="font-size: 1.1rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <strong>{{ comment.user.username }}</strong> 
+              <small class="text-muted">em {{ comment.created_at|date:"d/m/Y H:i" }}</small>
+            </div>
+            <div>
+              <a href="{% url 'store:like_comment' comment.id %}" class="btn btn-sm btn-outline-primary me-2">
+                ❤️ ({{ comment.total_likes }})
+              </a>
+              {% if user == comment.user %}
+              <a href="{% url 'store:edit_comment' comment.id %}" class="btn btn-sm btn-outline-secondary">
+                ✏️
+              </a>
+              {% endif %}
+            </div>
+          </div>
+
+          <p class="mb-1 mt-2" style="font-size: 1.1rem; color: #ffc107;">
             {% for i in "12345" %}
               {% if forloop.counter <= comment.rating %}
                 ★
@@ -71,6 +85,7 @@
               {% endif %}
             {% endfor %}
           </p>
+
           <p class="mb-0">{{ comment.text|linebreaks }}</p>
         </div>
       </div>
@@ -79,6 +94,7 @@
     <p>Este produto ainda não possui comentários.</p>
   {% endif %}
 </div>
+
 
 {# ---------------------- FORMULÁRIO DE COMENTÁRIO ---------------------- #}
 {% if user.is_authenticated %}

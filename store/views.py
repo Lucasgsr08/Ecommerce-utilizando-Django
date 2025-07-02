@@ -1,28 +1,23 @@
-# ecommerce/store/views.py
-
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.db.models import Avg, Count  # Importado para calcular média e contagem
+from django.db.models import Avg, Count
+from django.http import HttpResponseForbidden
 from .models import Product, Category, Comment
 from .forms import CommentForm
-
 
 def product_list(request, category_slug=None):
     category = None
     categories = Category.objects.all()
     products = Product.objects.filter(available=True)
 
-    # Filtro por nome (busca)
     query = request.GET.get('q')
     if query:
         products = products.filter(name__icontains=query)
 
-    # Filtro por categoria
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
         products = products.filter(category=category)
 
-    # Filtro por preço
     min_price = request.GET.get('min_price')
     max_price = request.GET.get('max_price')
     if min_price:
@@ -36,12 +31,9 @@ def product_list(request, category_slug=None):
         'products': products,
     })
 
-
 def product_detail(request, id, slug):
     product = get_object_or_404(Product, id=id, slug=slug, available=True)
     comments = product.comments.select_related('user').order_by('-created_at')
-
-    # Cálculo da média e contagem de avaliações
     rating_data = product.comments.aggregate(
         average_rating=Avg('rating'),
         total_reviews=Count('id')
@@ -69,6 +61,34 @@ def product_detail(request, id, slug):
         'total_reviews': rating_data['total_reviews'],
     })
 
+@login_required
+def edit_comment(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    if comment.user != request.user:
+        return HttpResponseForbidden("Você não pode editar este comentário.")
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            return redirect('store:product_detail', id=comment.product.id, slug=comment.product.slug)
+    else:
+        form = CommentForm(instance=comment)
+
+    return render(request, 'store/comment_edit.html', {
+        'form': form,
+        'comment': comment
+    })
+
+@login_required
+def like_comment(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    user = request.user
+    if user in comment.likes.all():
+        comment.likes.remove(user)
+    else:
+        comment.likes.add(user)
+    return redirect('store:product_detail', id=comment.product.id, slug=comment.product.slug)
 
 def ajuda(request):
     return render(request, 'store/ajuda.html')

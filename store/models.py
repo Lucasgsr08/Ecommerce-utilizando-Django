@@ -1,8 +1,8 @@
-# ecommerce/store/models.py
+# store/models.py
 
 from django.db import models
 from django.urls import reverse
-from django.contrib.auth.models import User  # 🔹 Importado para o modelo de comentários
+from django.contrib.auth.models import User
 
 class Category(models.Model):
     name = models.CharField(max_length=200, db_index=True)
@@ -46,16 +46,21 @@ class Product(models.Model):
         return reverse('store:product_detail', args=[self.id, self.slug])
 
 
-# Comentário com estrelas de 1 a 5
+# Comentário com avaliação, edição e likes
 class Comment(models.Model):
     product = models.ForeignKey(Product, related_name='comments', on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField("Comentário")
     rating = models.IntegerField("Avaliação (1 a 5)", choices=[(i, i) for i in range(1, 6)], default=5)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)  # 🔹 Para controle de edição
+    likes = models.ManyToManyField(User, related_name='liked_comments', blank=True)  # 🔹 Likes de outros usuários
 
     class Meta:
         ordering = ['-created_at']
 
     def __str__(self):
         return f'{self.user.username} - {self.product.name} - {self.rating} estrela(s)'
+
+    def total_likes(self):
+        return self.likes.count()

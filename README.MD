@@ -5,7 +5,7 @@ Este é um projeto de ecommerce desenvolvido em Django para fins de aprendizado 
 ## 🚀 Funcionalidades
 
 - Registro e login de usuários
-- Logout com segurança (método POST)
+- Logout com segurança 
 - Listagem de produtos por categorias
 - Detalhes de produtos
 - Carrinho de compras
@@ -16,7 +16,7 @@ Este é um projeto de ecommerce desenvolvido em Django para fins de aprendizado 
 ## 🔧 Possíveis Melhorias Futuras
 
 - Integração com gateway de pagamento (ex: Stripe ou PagSeguro)
-- Sistema de avaliação/comentário para os produtos
+- Sistema de avaliação/comentário para os produtos ---------------- ok 
 - Dashboard para o administrador com gráficos de vendas
 - Área "Meus Pedidos" para usuários autenticados
 - Integração com API de frete (ex: Correios)
