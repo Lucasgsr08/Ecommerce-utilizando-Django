@@ -1,7 +1,5 @@
-# orders/models.py
-
 from django.db import models
-from store.models import Product # Importa o modelo Product de store
+from store.models import Product
 
 class Order(models.Model):
     first_name = models.CharField(max_length=50)
@@ -14,20 +12,27 @@ class Order(models.Model):
     updated = models.DateTimeField(auto_now=True)
     paid = models.BooleanField(default=False)
 
+    STATUS_PAGAMENTO = [
+        ('pendente', 'Pendente'),
+        ('pago', 'Pago'),
+        ('falhou', 'Falhou'),
+    ]
+    status_pagamento = models.CharField(
+        max_length=10,
+        choices=STATUS_PAGAMENTO,
+        default='pendente'
+    )
+
     class Meta:
-        ordering = ['-created'] # Ordena os pedidos por data de criação decrescente
+        ordering = ['-created']
 
     def __str__(self):
-        return f'Order {self.id}' # String de representação do objeto Order
+        return f'Order {self.id}'
 
     def get_total_cost(self):
-        # Calcula o custo total do pedido somando os custos de todos os itens do pedido
-        return sum(item.get_cost() for item in self.items.all()) # Assume que 'self.items' é o related_name de OrderItem
+        return sum(item.get_cost() for item in self.items.all())
 
 class OrderItem(models.Model):
-    # Corrigido: ForeignKey deve apontar para o modelo 'Order' diretamente.
-    # Se 'Order' estiver definido ANTES de 'OrderItem' no mesmo arquivo, pode-se usar o nome da classe.
-    # Caso contrário, é mais seguro usar o nome do modelo como string ('orders.Order')
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, related_name='order_items', on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)

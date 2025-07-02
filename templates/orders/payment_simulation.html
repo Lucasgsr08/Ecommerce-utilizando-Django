@@ -1,0 +1,17 @@
+{% extends "store/base.html" %}
+
+{% block title %}Pagamento{% endblock %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <h2>Simulação de Pagamento</h2>
+    <p>Você será redirecionado para o Stripe (fictício)...</p>
+
+    <p><strong>Pedido nº:</strong> {{ order.id }}</p>
+    <p><strong>Total:</strong> R$ {{ order.get_total_cost }}</p>
+
+    <a href="{% url 'orders:order_success' %}?order_id={{ order.id }}" class="btn btn-success mt-4">
+        ✅ Simular Pagamento com Stripe
+    </a>
+</div>
+{% endblock %}
