@@ -2,8 +2,7 @@
 
 
 
-A **LojaVirtual** é uma aplicação web de e-commerce completa desenvolvida em **Django** e **Python**, com um frontend responsivo construído com **HTML**, **CSS** e **Bootstrap 4**. Este projeto foi criado com o objetivo de demonstrar habilidades sólidas em desenvolvimento web full-stack, cobrindo desde a gestão de banco de dados e lógica de backend até a interface de usuário interativa. É um excelente exemplo de aplicação para um portfólio técnico.
-
+A **LojaVirtual** é uma aplicação web de e-commerce completa desenvolvida em **Django** e **Python**, com um frontend responsivo construído com **HTML**, **CSS** e **Bootstrap 4**. Este projeto foi criado com o objetivo de demonstrar habilidades sólidas em desenvolvimento web full-stack, cobrindo desde a gestão de banco de dados e lógica de backend até a interface de usuário interativa.
 
 
 ## ✨ Funcionalidades Principais
