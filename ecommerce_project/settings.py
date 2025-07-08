@@ -11,6 +11,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Configurações de aplicativos instalados
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -24,8 +25,12 @@ INSTALLED_APPS = [
     'orders',
     'crispy_forms',
     'crispy_bootstrap4',  # Adiciona o template pack do Bootstrap 4
+    'rest_framework',
+    'rest_framework.authtoken',
+
 ]
 
+# Configurações de middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -36,8 +41,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# Configurações de URLs
 ROOT_URLCONF = 'ecommerce_project.urls'
 
+# Configurações de templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -58,8 +65,10 @@ TEMPLATES = [
     },
 ]
 
+# Configurações de URL
 WSGI_APPLICATION = 'ecommerce_project.wsgi.application'
 
+# Configurações do banco de dados
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -67,6 +76,7 @@ DATABASES = {
     }
 }
 
+# Configurações de autenticação
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -82,6 +92,20 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+# Configurações do Django REST Framework
+REST_FRAMEWORK = { 
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
+}
+
+
+# Configurações de internacionalização
 LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'America/Sao_Paulo'
@@ -108,3 +132,17 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = ['bootstrap4']
 LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = 'store:product_list'
 LOGOUT_REDIRECT_URL = 'store:product_list'
+
+
+#----------------------------------------
+# Configurações do Django REST Framework
+#----------------------------------------
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',  # depois mudamos pra IsAuthenticated onde precisar
+    ]
+}
